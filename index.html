@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,21 +30,23 @@
 	<script type="text/javascript" src='quicktour.js'></script>
 	<script type="text/javascript">
 		$(document).ready(function () {
-			var q = new Quicktour();
+			var q = new Quicktour([],{
+				fade_in_time: 1000,
+				title: "Hi there, thanks for stopping by. Looks like it's your first time here.",
+				title_options: {
+					padding: "250px"
+				}
+			});
+
 			q.addItem({element: $('.banners'),
-						description: "this is a cool thing",
-						padding_dimensions: {
-							left: 0,
-							bottom: 20
-						},
-						description_options: {
-							font: "Times New Roman"
-						}
+						description: "Click on the banners to see my profiles on social media (including github and dribbble).",
 					});
 			q.addItem({element: $('.nav'),
-						description: "this is a cool thing"});
+						description: "You can see all the other parts of my site here.",
+							"description_options": {"width": 400}
+						});
 			q.addItem({element: $('.header-image'),
-						description: "this is a cool thing"});
+						description: "Check out my shades!"});
 			q.start();
 		});
 	</script>

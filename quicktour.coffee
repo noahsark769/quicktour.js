@@ -30,12 +30,25 @@ class window.Quicktour
 			right: 3
 			left: 3
 
-		@highlight_color = options.highlight_color || "#08c"
-		@text_color = options.text_color || options.highlight_color || "#08c"
+		@highlight_color = options.highlight_color || "#36BBCE"
+		@text_color = options.text_color || options.highlight_color || "#36BBCE"
 		@description_offset = options.description_offset ||
 			top: 30
 			left: 0
 		@description_font = options.description_font || "'Helvetica Neue', Helvetica, sans-serif"
+		@set_css = if options.set_css? then options.set_css else true
+
+		@step_through = if options.step_through? then options.step_through else true
+
+		console.log options.step_through
+		console.log options.step_through?
+		console.log @step_through
+
+		@title = options.title
+		@title_options = options.title_options ||
+			width: "100%"
+			padding: "200px"
+			font: "'Helvetica Neue', Halvetica, sans-serif"
 
 	addItem: (item) ->
 		# add a tour item:
@@ -55,11 +68,38 @@ class window.Quicktour
 			options = {}
 		@init_options(options)
 
+	calculate_border: (item) ->
+		right = item?.border_dimensions?.right || @border_dimensions.right
+		left = item?.border_dimensions?.left || @border_dimensions.left
+		top = item?.border_dimensions?.top || @border_dimensions.top
+		bottom = item?.border_dimensions?.bottom || @border_dimensions.bottom
+
+		return {
+			top: top,
+			bottom: bottom,
+			right: right,
+			left: left
+		}
+
+	calculate_padding: (item) ->
+		right = item?.padding_dimensions?.right || @padding_dimensions.right
+		left = item?.padding_dimensions?.left || @padding_dimensions.left
+		top = item?.padding_dimensions?.top || @padding_dimensions.top
+		bottom = item?.padding_dimensions?.bottom || @padding_dimensions.bottom
+
+		rtn = {
+			top: top,
+			bottom: bottom,
+			right: right,
+			left: left
+		}
+
+		console.log rtn
+		return rtn
+
 	start: ->
 		width = $(document).width()
 		height = $(document).height()
-		console.log width
-		console.log height
 
 		# append the semi transparent background
 		if not @frame
@@ -75,10 +115,15 @@ class window.Quicktour
 
 		# now append the frame and make it animate in
 		$("body").append @frame
-		@frame.fadeIn(@fade_in_time)
+
+		# make sure frame goes away when clicked
+		if not @step_through
+			@frame.click ->
+				_this = $(this)
+				_this.fadeOut @fade_in_time, ->
+					_this.remove()
 
 		# actually do the stuff
-		console.log("starting the tour")
 		for item in @item_list
 			if not item.element?
 				console.log "your item doesnt have an element"
@@ -93,28 +138,22 @@ class window.Quicktour
 			new_elem.css "height", item.element.height()
 			new_elem.css "width", item.element.width()
 
+			padding = this.calculate_padding item
+			border = this.calculate_border item
+
 			new_elem.css "position", "absolute"
-			new_elem.css "left", offset.left - (item.padding_dimensions?.left || @padding_dimensions.left) - (item.border_dimensions?.left || @border_dimensions.left) + "px"
-			new_elem.css "top", offset.top - (item.padding_dimensions?.top || @padding_dimensions.top) - (item.border_dimensions?.top || @border_dimensions.top) + "px"
+			new_elem.css "left", offset.left - padding.left - border.left + "px"
+			new_elem.css "top", offset.top - padding.top - border.top + "px"
 
-			console.log offset.top
-			console.log item.padding_dimensions?.top || @padding_dimensions.top
-			console.log item.border_dimensions?.top || @border_dimensions.top
+			if @set_css
+				new_elem.css "border-width", "#{border.top}px #{border.right}px #{border.bottom}px #{border.left}px"
+				new_elem.css "border-style", "solid"
+				new_elem.css "border-color", @highlight_color
 
-			new_elem.css "border-top", "#{if item.border_dimensions then item.border_dimensions.top else @border_dimensions.top}px solid #{@highlight_color}"
-			new_elem.css "border-right", "#{if item.border_dimensions then item.border_dimensions.right else @border_dimensions.right}px solid #{@highlight_color}"
-			new_elem.css "border-bottom", "#{if item.border_dimensions then item.border_dimensions.bottom else @border_dimensions.bottom}px solid #{@highlight_color}"
-			new_elem.css "border-left", "#{if item.border_dimensions then item.border_dimensions.left else @border_dimensions.left}px solid #{@highlight_color}"
+				new_elem.css "padding", "#{padding.top}px #{padding.right}px #{padding.bottom}px #{padding.left}px"
 
-			# new_elem.css "padding", "#{if item.padding_dimensions then item.padding_dimensions.top else @padding_dimensions.top}px #{if item.padding_dimensions then item.padding_dimensions.right else @padding_dimensions.right}px #{if item.padding_dimensions then item.padding_dimensions.bottom else @padding_dimensions.bottom}px #{if item.padding_dimensions then item.padding_dimensions.left else @padding_dimensions.left}px"
-			console.log "fucking padding top:"
-			new_elem.css "padding-top", "#{item.padding_dimensions?.top || @padding_dimensions.top}"
-			new_elem.css "padding-right", "#{item.padding_dimensions?.right || @padding_dimensions.right}"
-			new_elem.css "padding-bottom", "#{item.padding_dimensions?.bottom || @padding_dimensions.bottom}"
-			new_elem.css "padding-left", "#{item.padding_dimensions?.left || @padding_dimensions.left}"
-
-			# append it to the frame
-			@frame.append new_elem
+			new_elem.data("quicktour-item", item)
+			item.highlight_element = new_elem
 
 			# now append the text descriptions
 			if not item.description? then continue
@@ -126,12 +165,70 @@ class window.Quicktour
 			text_elem.css "left", offset.left
 			console.log offset.left
 
-			text_elem.css "width", item.element.outerWidth()
-			text_elem.css "color", "#{@text_color}"
+			if @set_css
+				text_elem.css "width", item.description_options?.width || item.element.outerWidth() || @description_width
+				text_elem.css "color", "#{@text_color}"
 
-			text_elem.css "font-family", item.description_options?.font || @description_font
+			if @set_css
+				text_elem.css "font-family", item.description_options?.font || @description_font
+
+			text_elem.data("quicktour-item", item)
+			item.description_element = text_elem
+
+			# if stepping thorugh, everything is hidden initially
+			if @step_through
+				new_elem.css "display", "none"
+				text_elem.css "display", "none"
 
 			# append
+			@frame.append new_elem
 			@frame.append text_elem
+
+		# set up step through logic
+		if @step_through
+			index = 0
+			_this = this
+
+			if _this.title
+				title_elem = $ "<div class='quicktour-title'>#{_this.title}</div>"
+
+				if @set_css
+					title_elem.css "color", "#{@highlight_color}"
+					title_elem.css "text-align", "center"
+					title_elem.css "margin", "0 auto"
+					title_elem.css "padding-top", @title_options.padding || "200px"
+					title_elem.css "width", @title_options.width || "100%"
+					title_elem.css "font-family", @title_options.font || "'Helvetica Neue', Halvetica, sans-serif"
+				@frame.append title_elem
+
+			title_showing = true
+			_this.frame.click ->
+				$this = $(this)
+
+				# if we showed a title already, show the first box
+				if title_showing
+					console.log "gunna do tis"
+					_this.item_list[index].highlight_element.fadeIn(_this.fade_in_time)
+					_this.item_list[index].description_element.fadeIn(_this.fade_in_time)
+					if _this.title
+						title_elem.fadeOut(_this.fade_in_time)
+					title_showing = false
+					return
+				console.log "got here"
+				_this.item_list[index].highlight_element.fadeOut _this.fade_in_time, ->
+					if index < _this.item_list.length - 1
+						_this.item_list[index + 1].highlight_element.fadeIn(_this.fade_in_time)
+						_this.item_list[index + 1].description_element.fadeIn(_this.fade_in_time)
+					else
+						$this.fadeOut _this.fade_in_time, ->
+							$this.remove()
+					index++
+				_this.item_list[index].description_element.fadeOut _this.fade_in_time
+
+			if not @title
+				@frame.click()
+
+		# aaaaaand we're done
+		@frame.fadeIn(@fade_in_time)
 
 console.log "finished"

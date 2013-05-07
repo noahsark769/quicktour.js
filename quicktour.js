@@ -34,13 +34,24 @@
         right: 3,
         left: 3
       };
-      this.highlight_color = options.highlight_color || "#08c";
-      this.text_color = options.text_color || options.highlight_color || "#08c";
+      this.highlight_color = options.highlight_color || "#36BBCE";
+      this.text_color = options.text_color || options.highlight_color || "#36BBCE";
       this.description_offset = options.description_offset || {
         top: 30,
         left: 0
       };
-      return this.description_font = options.description_font || "'Helvetica Neue', Helvetica, sans-serif";
+      this.description_font = options.description_font || "'Helvetica Neue', Helvetica, sans-serif";
+      this.set_css = options.set_css != null ? options.set_css : true;
+      this.step_through = options.step_through != null ? options.step_through : true;
+      console.log(options.step_through);
+      console.log(options.step_through != null);
+      console.log(this.step_through);
+      this.title = options.title;
+      return this.title_options = options.title_options || {
+        width: "100%",
+        padding: "200px",
+        font: "'Helvetica Neue', Halvetica, sans-serif"
+      };
     };
 
     Quicktour.prototype.addItem = function(item) {
@@ -63,13 +74,43 @@
       return this.init_options(options);
     };
 
+    Quicktour.prototype.calculate_border = function(item) {
+      var bottom, left, right, top, _ref, _ref1, _ref2, _ref3;
+
+      right = (item != null ? (_ref = item.border_dimensions) != null ? _ref.right : void 0 : void 0) || this.border_dimensions.right;
+      left = (item != null ? (_ref1 = item.border_dimensions) != null ? _ref1.left : void 0 : void 0) || this.border_dimensions.left;
+      top = (item != null ? (_ref2 = item.border_dimensions) != null ? _ref2.top : void 0 : void 0) || this.border_dimensions.top;
+      bottom = (item != null ? (_ref3 = item.border_dimensions) != null ? _ref3.bottom : void 0 : void 0) || this.border_dimensions.bottom;
+      return {
+        top: top,
+        bottom: bottom,
+        right: right,
+        left: left
+      };
+    };
+
+    Quicktour.prototype.calculate_padding = function(item) {
+      var bottom, left, right, rtn, top, _ref, _ref1, _ref2, _ref3;
+
+      right = (item != null ? (_ref = item.padding_dimensions) != null ? _ref.right : void 0 : void 0) || this.padding_dimensions.right;
+      left = (item != null ? (_ref1 = item.padding_dimensions) != null ? _ref1.left : void 0 : void 0) || this.padding_dimensions.left;
+      top = (item != null ? (_ref2 = item.padding_dimensions) != null ? _ref2.top : void 0 : void 0) || this.padding_dimensions.top;
+      bottom = (item != null ? (_ref3 = item.padding_dimensions) != null ? _ref3.bottom : void 0 : void 0) || this.padding_dimensions.bottom;
+      rtn = {
+        top: top,
+        bottom: bottom,
+        right: right,
+        left: left
+      };
+      console.log(rtn);
+      return rtn;
+    };
+
     Quicktour.prototype.start = function() {
-      var height, item, new_elem, offset, text_elem, width, _i, _len, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9, _results;
+      var border, height, index, item, new_elem, offset, padding, text_elem, title_elem, title_showing, width, _i, _len, _ref, _ref1, _ref2, _ref3, _ref4, _this;
 
       width = $(document).width();
       height = $(document).height();
-      console.log(width);
-      console.log(height);
       if (!this.frame) {
         this.frame = $("<div class='quicktour-frame'></div>");
       }
@@ -81,10 +122,17 @@
       this.frame.css("left", 0);
       this.frame.css("display", "none");
       $("body").append(this.frame);
-      this.frame.fadeIn(this.fade_in_time);
-      console.log("starting the tour");
+      if (!this.step_through) {
+        this.frame.click(function() {
+          var _this;
+
+          _this = $(this);
+          return _this.fadeOut(this.fade_in_time, function() {
+            return _this.remove();
+          });
+        });
+      }
       _ref = this.item_list;
-      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         item = _ref[_i];
         if (item.element == null) {
@@ -97,36 +145,92 @@
         new_elem = $("<div class='quicktour-highlight'></div>");
         new_elem.css("height", item.element.height());
         new_elem.css("width", item.element.width());
+        padding = this.calculate_padding(item);
+        border = this.calculate_border(item);
         new_elem.css("position", "absolute");
-        new_elem.css("left", offset.left - (((_ref1 = item.padding_dimensions) != null ? _ref1.left : void 0) || this.padding_dimensions.left) - (((_ref2 = item.border_dimensions) != null ? _ref2.left : void 0) || this.border_dimensions.left) + "px");
-        new_elem.css("top", offset.top - (((_ref3 = item.padding_dimensions) != null ? _ref3.top : void 0) || this.padding_dimensions.top) - (((_ref4 = item.border_dimensions) != null ? _ref4.top : void 0) || this.border_dimensions.top) + "px");
-        console.log(offset.top);
-        console.log(((_ref5 = item.padding_dimensions) != null ? _ref5.top : void 0) || this.padding_dimensions.top);
-        console.log(((_ref6 = item.border_dimensions) != null ? _ref6.top : void 0) || this.border_dimensions.top);
-        new_elem.css("border-top", "" + (item.border_dimensions ? item.border_dimensions.top : this.border_dimensions.top) + "px solid " + this.highlight_color);
-        new_elem.css("border-right", "" + (item.border_dimensions ? item.border_dimensions.right : this.border_dimensions.right) + "px solid " + this.highlight_color);
-        new_elem.css("border-bottom", "" + (item.border_dimensions ? item.border_dimensions.bottom : this.border_dimensions.bottom) + "px solid " + this.highlight_color);
-        new_elem.css("border-left", "" + (item.border_dimensions ? item.border_dimensions.left : this.border_dimensions.left) + "px solid " + this.highlight_color);
-        console.log("fucking padding top:");
-        new_elem.css("padding-top", "" + (((_ref7 = item.padding_dimensions) != null ? _ref7.top : void 0) || this.padding_dimensions.top));
-        new_elem.css("padding-right", "" + (((_ref8 = item.padding_dimensions) != null ? _ref8.right : void 0) || this.padding_dimensions.right));
-        new_elem.css("padding-bottom", "" + (((_ref9 = item.padding_dimensions) != null ? _ref9.bottom : void 0) || this.padding_dimensions.bottom));
-        new_elem.css("padding-left", "" + (((_ref10 = item.padding_dimensions) != null ? _ref10.left : void 0) || this.padding_dimensions.left));
-        this.frame.append(new_elem);
+        new_elem.css("left", offset.left - padding.left - border.left + "px");
+        new_elem.css("top", offset.top - padding.top - border.top + "px");
+        if (this.set_css) {
+          new_elem.css("border-width", "" + border.top + "px " + border.right + "px " + border.bottom + "px " + border.left + "px");
+          new_elem.css("border-style", "solid");
+          new_elem.css("border-color", this.highlight_color);
+          new_elem.css("padding", "" + padding.top + "px " + padding.right + "px " + padding.bottom + "px " + padding.left + "px");
+        }
+        new_elem.data("quicktour-item", item);
+        item.highlight_element = new_elem;
         if (item.description == null) {
           continue;
         }
         text_elem = $("<div class='quicktour-description'>" + item.description + "</div>");
         text_elem.css("position", "absolute");
-        text_elem.css("top", item.element.outerHeight() + offset.top + (((_ref11 = item.description_options) != null ? (_ref12 = _ref11.offset) != null ? _ref12.top : void 0 : void 0) || this.description_offset.top));
+        text_elem.css("top", item.element.outerHeight() + offset.top + (((_ref1 = item.description_options) != null ? (_ref2 = _ref1.offset) != null ? _ref2.top : void 0 : void 0) || this.description_offset.top));
         text_elem.css("left", offset.left);
         console.log(offset.left);
-        text_elem.css("width", item.element.outerWidth());
-        text_elem.css("color", "" + this.text_color);
-        text_elem.css("font-family", ((_ref13 = item.description_options) != null ? _ref13.font : void 0) || this.description_font);
-        _results.push(this.frame.append(text_elem));
+        if (this.set_css) {
+          text_elem.css("width", ((_ref3 = item.description_options) != null ? _ref3.width : void 0) || item.element.outerWidth() || this.description_width);
+          text_elem.css("color", "" + this.text_color);
+        }
+        if (this.set_css) {
+          text_elem.css("font-family", ((_ref4 = item.description_options) != null ? _ref4.font : void 0) || this.description_font);
+        }
+        text_elem.data("quicktour-item", item);
+        item.description_element = text_elem;
+        if (this.step_through) {
+          new_elem.css("display", "none");
+          text_elem.css("display", "none");
+        }
+        this.frame.append(new_elem);
+        this.frame.append(text_elem);
       }
-      return _results;
+      if (this.step_through) {
+        index = 0;
+        _this = this;
+        if (_this.title) {
+          title_elem = $("<div class='quicktour-title'>" + _this.title + "</div>");
+          if (this.set_css) {
+            title_elem.css("color", "" + this.highlight_color);
+            title_elem.css("text-align", "center");
+            title_elem.css("margin", "0 auto");
+            title_elem.css("padding-top", this.title_options.padding || "200px");
+            title_elem.css("width", this.title_options.width || "100%");
+            title_elem.css("font-family", this.title_options.font || "'Helvetica Neue', Halvetica, sans-serif");
+          }
+          this.frame.append(title_elem);
+        }
+        title_showing = true;
+        _this.frame.click(function() {
+          var $this;
+
+          $this = $(this);
+          if (title_showing) {
+            console.log("gunna do tis");
+            _this.item_list[index].highlight_element.fadeIn(_this.fade_in_time);
+            _this.item_list[index].description_element.fadeIn(_this.fade_in_time);
+            if (_this.title) {
+              title_elem.fadeOut(_this.fade_in_time);
+            }
+            title_showing = false;
+            return;
+          }
+          console.log("got here");
+          _this.item_list[index].highlight_element.fadeOut(_this.fade_in_time, function() {
+            if (index < _this.item_list.length - 1) {
+              _this.item_list[index + 1].highlight_element.fadeIn(_this.fade_in_time);
+              _this.item_list[index + 1].description_element.fadeIn(_this.fade_in_time);
+            } else {
+              $this.fadeOut(_this.fade_in_time, function() {
+                return $this.remove();
+              });
+            }
+            return index++;
+          });
+          return _this.item_list[index].description_element.fadeOut(_this.fade_in_time);
+        });
+        if (!this.title) {
+          this.frame.click();
+        }
+      }
+      return this.frame.fadeIn(this.fade_in_time);
     };
 
     return Quicktour;
