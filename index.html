@@ -10,6 +10,7 @@
 
 	<link rel="stylesheet" type="text/css" href="http://noahsark769.github.io/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="http://noahsark769.github.io/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
 
 	<!-- responsive desktop styles -->
 	<link rel="stylesheet" type="text/css" media="(max-device-width: 900px)" href="http://noahsark769.github.io/css/styles-responsive.css">
@@ -35,11 +36,23 @@
 				title: "Hi there, thanks for stopping by. Looks like it's your first time here.",
 				title_options: {
 					padding: "250px"
+				},
+				padding_dimensions: {
+					top: 10,
+					bottom: 10,
+					left: 10,
+					right: 10
 				}
 			});
 
 			q.addItem({element: $('.banners'),
 						description: "Click on the banners to see my profiles on social media (including github and dribbble).",
+						padding_dimensions: {
+							top: 10,
+							bottom: 10,
+							left: 40,
+							right: 10
+						}
 					});
 			q.addItem({element: $('.nav'),
 						description: "You can see all the other parts of my site here.",
