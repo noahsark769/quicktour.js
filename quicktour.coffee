@@ -2,16 +2,13 @@
 # After that they can let the whole thing play out or control it programatically.
 class window.Quicktour
 
-	constructor: (@item_list, options) ->
-		if not options?
-			options = {}
-		if not @item_list?
-			@item_list = []
+	constructor: (options, item_list) ->
+		options = options || {}
+		@item_list = item_list || []
 		@init_options(options)
 
 	init_options: (options) ->
-		@elem_by_elem = options.elem_by_elem || false
-		@fade_time = options.fade_time || 1000
+		@fade_time = options.fade_time || 500
 
 		# frame opacity
 		if options.frame_opacity? and typeof options.frame_opacity == "number" and 1 >= options.frame_opacity >= 0
@@ -40,10 +37,6 @@ class window.Quicktour
 
 		@step_through = if options.step_through? then options.step_through else true
 
-		console.log options.step_through
-		console.log options.step_through?
-		console.log @step_through
-
 		@title = options.title
 		@title_options = options.title_options ||
 			width: "100%"
@@ -55,7 +48,6 @@ class window.Quicktour
 		# element, description
 		if not item.element instanceof jQuery
 			# throw error
-			console.log "You have to pass jqueries."
 			return null
 		@item_list.push item
 
@@ -94,8 +86,12 @@ class window.Quicktour
 			left: left
 		}
 
-		console.log rtn
 		return rtn
+
+	stop: ->
+		frame = @frame
+		frame.fadeOut @fade_time, ->
+			frame.remove()
 
 	start: ->
 		width = $(document).width()
@@ -120,18 +116,15 @@ class window.Quicktour
 		if not @step_through
 			@frame.click ->
 				_this = $(this)
-				_this.fadeOut @fade_in_time, ->
+				_this.fadeOut @fade_time, ->
 					_this.remove()
 
 		# actually do the stuff
 		for item in @item_list
 			if not item.element?
-				console.log "your item doesnt have an element"
 				continue
 
-			console.log "touring element:"
 			offset = item.element.offset()
-			console.log offset
 			
 			# create a new element at the same place
 			new_elem = $ "<div class='quicktour-highlight'></div>"
@@ -162,8 +155,7 @@ class window.Quicktour
 
 			text_elem.css "position", "absolute"
 			text_elem.css "top", item.element.outerHeight() + offset.top + (item.description_options?.offset?.top || @description_offset.top)
-			text_elem.css "left", offset.left
-			console.log offset.left
+			text_elem.css "left", offset.left + (item.description_options?.offset?.left || @description_offset.left)
 
 			if @set_css
 				text_elem.css "width", item.description_options?.width || item.element.outerWidth() || @description_width
@@ -207,28 +199,25 @@ class window.Quicktour
 
 				# if we showed a title already, show the first box
 				if title_showing
-					console.log "gunna do tis"
-					_this.item_list[index].highlight_element.fadeIn(_this.fade_in_time)
-					_this.item_list[index].description_element.fadeIn(_this.fade_in_time)
+					_this.item_list[index].highlight_element.fadeIn(_this.fade_time)
+					_this.item_list[index].description_element.fadeIn(_this.fade_time)
 					if _this.title
-						title_elem.fadeOut(_this.fade_in_time)
+						title_elem.fadeOut(_this.fade_time)
 					title_showing = false
 					return
-				console.log "got here"
-				_this.item_list[index].highlight_element.fadeOut _this.fade_in_time, ->
+				_this.item_list[index].highlight_element.fadeOut _this.fade_time, ->
 					if index < _this.item_list.length - 1
-						_this.item_list[index + 1].highlight_element.fadeIn(_this.fade_in_time)
-						_this.item_list[index + 1].description_element.fadeIn(_this.fade_in_time)
+						_this.item_list[index + 1].highlight_element.fadeIn(_this.fade_time)
+						_this.item_list[index + 1].description_element.fadeIn(_this.fade_time)
 					else
-						$this.fadeOut _this.fade_in_time, ->
+						$this.fadeOut _this.fade_time, ->
 							$this.remove()
 					index++
-				_this.item_list[index].description_element.fadeOut _this.fade_in_time
+				_this.item_list[index].description_element.fadeOut _this.fade_time
 
 			if not @title
 				@frame.click()
 
 		# aaaaaand we're done
-		@frame.fadeIn(@fade_in_time)
+		@frame.fadeIn(@fade_time)
 
-console.log "finished"

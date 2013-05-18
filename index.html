@@ -1,178 +1,169 @@
-<!DOCTYPE html>
 <html>
 <head>
-	<meta charset=utf-8 />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title> Blog |  Noah Gilmore</title>
-
-	<link href='http://fonts.googleapis.com/css?family=Maven+Pro' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Josefin+Sans:300' rel='stylesheet' type='text/css'>
-
-	<link rel="stylesheet" type="text/css" href="http://noahsark769.github.io/css/reset.css">
-	<link rel="stylesheet" type="text/css" href="http://noahsark769.github.io/css/styles.css">
-	<link rel="stylesheet" type="text/css" href="styles.css">
-
-	<!-- responsive desktop styles -->
-	<link rel="stylesheet" type="text/css" media="(max-device-width: 900px)" href="http://noahsark769.github.io/css/styles-responsive.css">
-	<link rel="stylesheet" type="text/css" media="(max-device-width: 640px)" href="http://noahsark769.github.io/css/styles-responsive-small.css">
-	<link rel="stylesheet" type="text/css" media="(max-device-width: 480px) and (orientation: portrait)" href="http://noahsark769.github.io/css/styles-responsive-extra-small.css">
-
-	<!-- responsive mobile styles -->
-	<link rel="stylesheet" type="text/css" media="(max-width: 900px)" href="http://noahsark769.github.io/css/styles-responsive.css">
-	<link rel="stylesheet" type="text/css" media="(max-width: 500px)" href="http://noahsark769.github.io/css/styles-responsive-small.css">
-	<link rel="stylesheet" type="text/css" media="(max-width: 350px)" href="http://noahsark769.github.io/css/styles-responsive-extra-small.css">
-
-	<link rel="stylesheet" type="text/css" href="http://noahsark769.github.io/css/elusive/elusive-webfont.css">
-	<!--[if lte IE 7] -->
-	<link rel="stylesheet" type="text/css" href="http://noahsark769.github.io/css/elusive/elusive-webfont-ie7.css">
-	<!--[endif] -->
-
-	<script type="text/javascript" src='http://code.jquery.com/jquery-1.9.1.min.js'></script>
-	<script type="text/javascript" src='quicktour.js'></script>
-	<script type="text/javascript">
-		$(document).ready(function () {
-			var q = new Quicktour([],{
-				fade_in_time: 1000,
-				title: "Hi there, thanks for stopping by. Looks like it's your first time here.",
-				title_options: {
-					padding: "250px"
-				},
-				padding_dimensions: {
-					top: 10,
-					bottom: 10,
-					left: 10,
-					right: 10
-				}
-			});
-
-			q.addItem({element: $('.banners'),
-						description: "Click on the banners to see my profiles on social media (including github and dribbble).",
-						padding_dimensions: {
-							top: 10,
-							bottom: 10,
-							left: 40,
-							right: 10
-						}
-					});
-			q.addItem({element: $('.nav'),
-						description: "You can see all the other parts of my site here.",
-							"description_options": {"width": 400}
-						});
-			q.addItem({element: $('.header-image'),
-						description: "Check out my shades!"});
-			q.start();
-		});
-	</script>
+	<title>Quicktour.js - Examples</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+	<style type="text/css">
+		.separate {
+			margin-bottom: 20px;
+		}
+	</style>
 </head>
 <body>
 	<div class="container">
-		<div class="header-container">
-			<div class="header">
+		<h1>Quicktour.js</h1>
+		<p>Intuitive, pretty jQuery website tours. <a href="test.html">Here</a>'s a demo.</p>
+		<p>Here's the demo's code:</p>
+		<pre>
+$(document).ready(function () {
+	var q = new Quicktour({
+		fade_in_time: 1000,
+		title: "Hi there, thanks for stopping by. Looks like it's your first time here.",
+		title_options: {
+			padding: "250px"
+		},
+		padding_dimensions: {
+			top: 10,
+			bottom: 10,
+			left: 10,
+			right: 10
+		}
+	});
 
-				<div class="banners">
-					<div class="banner twitter"><a href='http://twitter.com/noahsark769'>
-						<div class="icon">
-							<i class='icon-twitter'></i>
-						</div></a>
-					</div><div class="banner github"><a href='http://github.com/noahsark769'>
-						<div class="icon">
-							<i class='icon-github'></i>
-						</div></a>
-					</div><div class="banner dribbble"><a href='http://dribbble.com/noahsark769'>
-						<div class="icon">
-							<i class='icon-dribble'></i>
-						</div></a>
-					</div><div class="banner email"><a href='mailto:noah.w.gilmore@gmail.com'>
-						<div class="icon">
-							<i class='icon-envelope'></i>
-						</div></a>
-					</div><div class="banner home"><a href='http://noahgilmore.com'>
-						<div class="icon">
-							<i class='icon-home'></i>
-						</div></a>
-					</div>
-				</div>
-				
-				<div class="nav">
-					<ul>
-						<li class="about"><a href="http://noahgilmore.com">About</a></li>
-						<li class="projects"><a href="http://noahgilmore.com/#projects">Projects</a></li>
-						<li class="resume"><a href="http://noahgilmore.com/noah-gilmore-resume.pdf">Resume</a></li>
-						<li class="services"><a href="http://noahgilmore.com/#services">Hire</a></li>
-						<li class="contact"><a href="http://noahgilmore.com/#contact">Contact</a></li>
-					</ul>
-				</div>
+	q.addItem({element: $('.banners'),
+		description: "Click on the banners to see my profiles on social media.",
+		padding_dimensions: {
+			top: 10,
+			bottom: 10,
+			left: 40,
+			right: 10
+		}
+	});
 
-				<div class="title">Noah Gilmore<span class='blog'> - Blog</span></div>
-				<div class="subtitle">Thoughts on web/software/graphic/ui design and development.</div>
+	q.addItem({element: $('.nav'),
+		description: "You can see all the other parts of my site here.",
+		description_options: {"width": 400}
+	});
+
+	q.addItem({element: $('.header-image'),
+		description: "Check out my shades!"});
+	
+	q.start();
+});
+		</pre>
+
+		<h2>Implementation</h2>
+		<p>Download the <code>quicktour.js</code> javascript file and include it in your page (along with jQuery).</p>
+
+		<h3>Basic Functionality</h3>
+		<div class="row separate">
+			<div class="span6">
+				<strong>Create a new tour object</strong>. This is ready to go out of the box - you don't need to specify any options. However, you need to add elements before you can start the tour.
 			</div>
-			<div class="header-image">
-				<img class="circular" src='http://noahsark769.github.io/img/twitter-profile-pic.jpg'/>
+			<div class="span6">
+				<pre>var q = new Quicktour({
+	...
+});</pre>
 			</div>
 		</div>
 
-		
-<div class="post">
-	<div class="post-title">
-		Hack Friday - Compiling this blog
+		<div class="row separate">
+			<div class="span6">
+				<strong>Add items</strong>. A tour item is an object that takes the keys `element` (a jquery of what you want to highlight) and `description` (the description of the element(s)), as well as multiple other parameters described later.
+			</div>
+			<div class="span6">
+				<pre>q.addItem({element: $('.banners'),
+	description: "Click on the banners."
+});</pre>
+			</div>
+		</div>
+
+		<div class="row separate">
+			<div class="span6">
+				<strong>Start the tour</strong>. Quicktour.js uses an iterative loop to highlight each tour item in the order you add them. A dark frame will appear over the website, showing a title (if specified), and the tour will progress with each click.
+			</div>
+			<div class="span6">
+				<pre>q.start();</pre>
+			</div>
+		</div>
+
+		<h3>Available Options</h3>
+		<h4>Tour options</h4>
+		<p>These are specified in the <code>Quicktour</code> constructor.</p>
+		<table class="table">
+			<tr>
+				<td><code>fade_time</code></td><td>The time, in milliseconds, for the dark frame and the highlights on each item to fade in and out. Defaults to 500.</td>
+			</tr>
+
+			<tr>
+				<td><code>frame_opacity</code></td><td>The opacity of the background frame. Defaults to 0.7.</td>
+			</tr>
+			<tr>
+				<td><code>set_css</code></td><td>If true, Quicktour.js will set element level css based on the specified options below. Defaults to true.</td>
+			</tr>
+			<tr>
+				<td><code>highlight_color</code></td><td>The hex code of the color you want the highlighted border to be, including the hash sign. Defaults to #36BBCE, a nice cheery light blue.</td>
+			</tr>
+			<tr>
+				<td><code>text_color</code></td><td>The hex code (again including the hash sign) that you want the description text to appear in. Defaults to <code>highlight_color</code>, and then to #36BBCE.</td>
+			</tr>
+			<tr>
+				<td><code>step_through</code></td><td>If true, the tour will progress iteratively based on when the user clicks on the page. If false, all tour elements will be shown at once. Defaults to true.</td>
+			</tr>
+			<tr>
+				<td><code>title</code></td><td>A title or introductory statement for the tour. Will be shown before anything else is highlighted.</td>
+			</tr>
+			<tr>
+				<td><code>title_options</code></td><td>An object with the keys <code>width</code>, <code>padding</code>, and <code>font</code>, which will be used to set the respective CSS attributes of the title element if <code>set_css</code> is set. Defaults to "100%", "200px" and "'Helvetica Neue', Halvetica, sans-serif" respectively. Note that the <code>padding</code> option specifes only the <code>padding-top</code> of the title element.</td>
+			</tr>
+			<tr>
+				<td><code>description_offset</code></td><td>An object with the keys <code>top</code> and <code>left</code>, where each is a number. These specify an offset for the positioning of the description for each element. If they are both 0, the description will appear directly under the border of the element (accounting for padding). If, for example, <code>top</code> is 30, then the descriptions will appear 30 pixels lower than they usually would. Defaults to <code>{top: 30, left: 0}</code>. </td>
+			</tr>
+			<tr>
+				<td><code>description_font</code></td><td>A CSS compatible string which will be used to set the CSS <code>font-family</code> attribute of the the descriptions if <code>set_css</code> is set. Defaults to Helvetica Neue, similarly to <code>title_options</code>.</td>
+			</tr>
+			<tr>
+				<td><code>padding_dimensions</code></td><td>An object with the keys <code>top</code>, <code>bottom</code>, <code>left</code>, and <code>right</code> that will be used as a fallback for the pixel width of the padding (space between content and border) of the tour items. Defaults to 5 for all.</td>
+			</tr>
+			<tr>
+				<td><code>border_dimensions</code></td><td>An object with the keys <code>top</code>, <code>bottom</code>, <code>left</code>, and <code>right</code> that will be used as a fallback for the pixel width of the border of the tour items. Defaults to 3 for all.</td>
+			</tr>
+		</table>
+
+		<h4>Item options</h4>
+		<p>These are added as extra keys to the <code>addItem</code> method. Any item-level option specified here for a specific item will override defaults and tour-level options.</p>
+		<table class='table'>
+			<tr>
+				<td><code>border_dimentions</code>, <code>padding_dimensions</code></td><td>The same as specified above, except they apply to the item they are specified for only.</td>
+			</tr>
+			<tr>
+				<td><code>description_options</code></td><td>An object with keys <code>width</code>, <code>offset</code>, and  </td>
+			</tr>
+		</table>
+
+		<h3>Methods</h3>
+		<table class="table">
+			<tr>
+				<td><pre>var q = Quicktour({...}, [...]);</pre></td><td>Create a new Quicktour object with the specified options and, optionally, a list of items to add to it initially.</td>
+			</tr>
+			<tr>
+				<td><pre>q.addItem({element: ..., description: ...});</pre></td><td>Add an item to the tour.</td>
+			</tr>
+			<tr>
+				<td><pre>q.setOption(key, val);</pre></td><td>Set a given option key to the value val.</td>
+			</tr>
+			<tr>
+				<td><pre>q.resetOptions({...});</pre></td><td>Reset all the options of a given tour as if you had passed the options to the constructor.</td>
+			</tr>
+			<tr>
+				<td><pre>q.start();</pre></td><td>Start the tour. The tour will end (and the darkend frame will go away) when all the elements have been iterated through.</td>
+			</tr>
+			<tr>
+				<td><pre>q.stop();</pre></td><td>End the tour.</td>
+			</tr>
+		</table>
 	</div>
-	<div class="post-date">
-		April 26th, 2013
-	</div>
-
-	<div class="post-content">
-		<p>If you&#8217;re reading this, and it looks pretty, that&#8217;s because I overhauled my entire blog design for this <a href='https://twitter.com/noahsark769/status/327836477851574273'>Hack Friday</a>.</p>
-
-<p>There were a few problems with my old blog, the most glaring of which was the fact that its style was based off of my <a href='http://noahgilmore.com'>landing page</a>. While the layout and colors of the landing page are, I think, fairly interesting and effective, they do not lend themselves well to reading large blocks of text. The green on green is hard to read, the lines are too long, and a bunch of useless Wordpress crap appears in every post (unless you tell it not to).</p>
-
-<p>I went with Wordpress when I decided to start an actual blog a few months ago mainly because I had never used it before - I wanted to learn how. That purpose has been served - I now feel confident that I could code up a dynamic site in Wordpress just fine (and in fact I have). However, there are a lot of problems with it logistically that I would rather not deal with.</p>
-
-<p>Why should I have to compose blog posts in the Wordpress web interface? Why is it inserting <code>&lt;br&gt;</code>s everywhere, even when I&#8217;m in the HTML editing view? Why does everything need to be stored in a database - it&#8217;s complicated to set up and slow. Why do I need to conform to Wordpress&#8217;s format when coding - shouldn&#8217;t the blog be a natural expression of my web design ability and creativity?</p>
-
-<p>As such, I&#8217;m done with Wordpress as a personal blogging platform for now. Instead, I&#8217;m switching to <a href='http://jekyllrb.com'>Jekyll</a>.</p>
-
-<p>There have been <a href='http://csswizardry.com/2012/12/a-new-css-wizardry/'>many</a> <a href='http://blog.chrisblunt.com/switching-to-jekyll/'>people</a> <a href='https://www.google.com/search?q=switching+to+jekyll&amp;aq=f&amp;oq=switching+to+jekyll&amp;aqs=chrome.0.57j60.2686j0&amp;sourceid=chrome&amp;ie=UTF-8'>talking</a> recently about making the switch from Wordpress to Jekyll, and for good reason. Jekyll is not a CMS (content management system), but it is an easy way to modularize and compile your website while giving you complete control over, well, everything. And everything is incredibly simple.</p>
-
-<p>To download Jekyll on Mac OSX, it was simply</p>
-
-<p><code>gem install jekyll</code></p>
-
-<p>from the command line. After creating the directories <code>_layouts</code> and <code>_posts</code> manually, it was a snap to compile my LESS to CSS, run <code>jekyll</code> from a terminal to compile everything into the <code>_site</code> directory, and then open the page up in Chrome.</p>
-
-<p>The <code>jekyll --server</code> can usually serve up your site locally for development purposes, but mine wouldn&#8217;t work for some reason related to the fact that I&#8217;m on a university wireless network (if you know why this would affect the jekyll server, <a href='http://twitter.com/noahsark769'>tell me</a>). This meant that I had to specify the full path to all of my CSS files in order for the post pages to be styled (because all my CSS is in the root directory, while the posts are not). Luckily this was incredibly easy to do by specifying a <code>url</code> attribute in <code>_config.yml</code>.</p>
-
-<p>The best thing of all is that there&#8217;s no dependence on my webhost - everything is hosted on <a href='http://pages.github.com/'>github pages</a> and you can check out the repository <a href='https://github.com/noahsark769/noahsark769.github.io'>here</a>.</p>
-
-<p><a href='http://northsidecafe.net/'>Northside Cafe</a> BLT was awesome, by the way.</p>
-	</div>
-</div>
-
-<div class="post">
-	<div class="post-title">
-		Crashing Chrome
-	</div>
-	<div class="post-date">
-		October 6th, 2012
-	</div>
-
-	<div class="post-content">
-		<p>While developing <a href='http://berkeleytime.com'>Berkeleytime</a>, a project I&#8217;m working on to help UC Berkeley students browse courses and plan their schedule effectively, we ran into one of the most interesting bugs I&#8217;ve ever encountered. The page would load, but the password field on the login form would occasionally stop working - when you removed all the text from the password field Chrome would slow to a halt and crash.</p>
-
-<p>The odd thing was that the same bug happened in Safari, but not in Firefox. We knew it must be something to do with webkit, but we had no idea what was causing it - and since our deadline to launch was coming up, we puzzled over it all night.</p>
-
-<p>Check out this <a href='http://noahgilmore.com/examples/webkit-password-crash.html'>example</a>. It seems that whenever Webkit detects that a password field (i.e. <code>&lt;input type=&#39;password&#39;&gt;</code>) has been made empty, it iterates through every DOM node present on the page BEFORE that password node.</p>
-
-<p>If the password input is at the top of the page, it hardly iterates through anything, but if the password node is the final element, it iterates through all the nodes in the tree. We were loading a page with about 5000 <code>li</code>s for all the Berkeley courses, plus 700+ <code>li</code>s for all the departments, plus maybe 1000+ more for the user interface. We had the login form in a popup with <a href='https://github.com/jackmoore/colorbox'>colorbox</a>, which automatically appends the popup content to the end of the page. So every time we deleted all the characters in the password, field, <em>all</em> the nodes got iterated through.</p>
-
-<p>We eventually fixed the problem by modifying the colorbox code to prepend the popup HTML rather then appending it.</p>
-
-<p>This is presumably a security measure, though I can’t think of a reason why Webkit would look through every single DOM node. It’s worth it to note that DOM trees of greater depth seem to make the “checking” algorithm even slower. For the record, this is Chrome 22.0.1229.79 and the bug has been posted for a while (6 months) <a href='https://code.google.com/p/chromium/issues/detail?id=121918&amp;q=password%20lag&amp;colspec=ID%20Pri%20Mstone%20ReleaseBlock%20OS%20Area%20Feature%20Status%20Owner%20Summary'>here</a>.</p>
-
-<p>Moral of the story: make sure you don’t have an inane number of elements before a password input in your HTML. If you really need to, consider using a dropdown menu jQuery plugin for your form, or anything you can use to provide your password field at the top of the HTML and display it later using javascript. Please <a href='http://twitter.com/noahsark769'>let me know</a> if you&#8217;re more knowledgeable about this than I am and you have an idea of why this might happen!</p>
-	</div>
-</div>
-
-	</div>
+	<div class="footer" style="width: 100%; text-align: center; font-size: 12px; margin-bottom: 20px;">Follow me on <a href="http://twitter.com/noahsark769">Twitter</a>. Here's my <a href='http://noahgilmore.com'>website</a> and <a href="http://blog.noahgilmore.com">blog</a>. Fork this <a href="https://github.com/noahsark769/quicktour.js/">here</a>.</div>
+	<a href="https://github.com/noahsark769/quicktour.js/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
 
 </body>
 </html>
